@@ -1,10 +1,12 @@
 ﻿using CliTool.Core;
+using CliTool.Modules.Horario;
 using CliTool.Modules.Text;
 using CliTool.Services;
 
 var modules = new List<BaseModule>
             {
                 new TextModule(),
+                new ConfigurationModule(),
             };
 
 while (true)
