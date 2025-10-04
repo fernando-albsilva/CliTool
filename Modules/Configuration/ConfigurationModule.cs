@@ -2,6 +2,7 @@
 using CliTool.Modules.Commands;
 using CliTool.Modules.Configuration.Payload;
 using CliTool.Modules.Project;
+using CliTool.Modules.Time;
 using CliTool.Services;
 
 namespace CliTool.Core
@@ -50,6 +51,16 @@ namespace CliTool.Core
                     JsonFileName = nameof(ToolInfoModule),
                     InitialData = ToolInfoPayload.Tools
 
+                });
+            }
+
+            if (resetConfiguration || !CheckForJsonFile<TimeModule>())
+            {
+                configurationArgs.ModulesConfig.Add(new ModuleConfig
+                {
+                    Name = nameof(TimeModule),
+                    JsonFileName = nameof(TimeModule),
+                    InitialData = new List<TimeMark>()
                 });
             }
 

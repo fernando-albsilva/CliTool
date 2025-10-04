@@ -9,8 +9,8 @@
 
     public class Option
     {
-        public string OrderText { get; set; }   // ex: "1"
-        public string DisplayText { get; set; } // ex: "Listar usuários"
+        public string OrderText { get; set; }  
+        public string DisplayText { get; set; } 
         public Action Execute { get; set; }
     }
 }

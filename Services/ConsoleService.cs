@@ -80,9 +80,9 @@ namespace CliTool.Services
             var layoutLine = lineBuilder.ToString();
             var moduleTitle = $"{titleAligment}{title}{titleAligment}";
 
-            WriteLine($"┌{layoutLine}┐", ConsoleColor.Yellow);
-            WriteLine($"│{moduleTitle}│", ConsoleColor.Yellow);
-            WriteLine($"└{layoutLine}┘", ConsoleColor.Yellow);
+            WriteLine($"┌{layoutLine}┐", ConsoleColor.DarkYellow);
+            WriteLine($"│{moduleTitle}│", ConsoleColor.DarkYellow);
+            WriteLine($"└{layoutLine}┘", ConsoleColor.DarkYellow);
 
             Console.WriteLine();
         }
