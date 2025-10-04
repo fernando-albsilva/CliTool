@@ -10,7 +10,7 @@ namespace CliTool.Services
         /// <param name="text">Texto da mensagem a ser exibida.</param>
         public static void WriteInfo(string text)
         {
-            Write("[Info]: ", ConsoleColorEnum.Blue);
+            Write("[Info]: ", ConsoleColor.Blue);
             WriteLine(text);
         }
 
@@ -20,7 +20,7 @@ namespace CliTool.Services
         /// <param name="text">Texto da mensagem a ser exibida.</param>
         public static void WriteWarning(string text)
         {
-            Write("[Warn]: ", ConsoleColorEnum.Yellow);
+            Write("[Warn]: ", ConsoleColor.Yellow);
             WriteLine(text);
         }
 
@@ -30,7 +30,7 @@ namespace CliTool.Services
         /// <param name="text">Texto da mensagem a ser exibida.</param>
         public static void WriteError(string text)
         {
-            Write("[Error]: ", ConsoleColorEnum.Red);
+            Write("[Error]: ", ConsoleColor.Red);
             WriteLine(text);
         }
 
@@ -40,8 +40,22 @@ namespace CliTool.Services
         /// <param name="text">Texto da mensagem a ser exibida.</param>
         public static void WriteSuccess(string text)
         {
-            Write("[Success]: ", ConsoleColorEnum.Green);
+            Write("[Success]: ", ConsoleColor.Green);
             WriteLine(text);
+        }
+
+        /// <summary>
+        /// Exibe uma mensagem de resultado no console, precedida pelo rótulo "Resultado:" 
+        /// em amarelo escuro. O texto informado é exibido logo em seguida na cor padrão do console.
+        /// </summary>
+        /// <param name="text">O texto a ser exibido após o rótulo "Resultado:". Caso não seja informado,  nada é exibido.</param>
+        public static void WriteResult(string text = "")
+        {
+            var previousColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("Resultado: ");
+            Console.ForegroundColor = previousColor;
+            Write(text);
         }
 
         /// <summary>
@@ -66,9 +80,9 @@ namespace CliTool.Services
             var layoutLine = lineBuilder.ToString();
             var moduleTitle = $"{titleAligment}{title}{titleAligment}";
 
-            WriteLine($"┌{layoutLine}┐", ConsoleColorEnum.Yellow);
-            WriteLine($"│{moduleTitle}│", ConsoleColorEnum.Yellow);
-            WriteLine($"└{layoutLine}┘", ConsoleColorEnum.Yellow);
+            WriteLine($"┌{layoutLine}┐", ConsoleColor.Yellow);
+            WriteLine($"│{moduleTitle}│", ConsoleColor.Yellow);
+            WriteLine($"└{layoutLine}┘", ConsoleColor.Yellow);
 
             Console.WriteLine();
         }
@@ -78,7 +92,7 @@ namespace CliTool.Services
         /// </summary>
         /// <param name="text">Texto a ser exibido.</param>
         /// <param name="color">Cor do texto. Padrão: branco.</param>
-        public static void WriteLine(string text, ConsoleColorEnum color = ConsoleColorEnum.White)
+        public static void WriteLine(string text = "", ConsoleColor color = ConsoleColor.White)
         {
             var previousColor = Console.ForegroundColor;
 
@@ -93,36 +107,12 @@ namespace CliTool.Services
         /// </summary>
         /// <param name="text">Texto a ser exibido.</param>
         /// <param name="color">Cor do texto. Padrão: branco.</param>
-        public static void Write(string text, ConsoleColorEnum color = ConsoleColorEnum.White)
+        public static void Write(string text, ConsoleColor color = ConsoleColor.White)
         {
             var previousColor = Console.ForegroundColor;
             Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), color.ToString());
             Console.Write(text);
             Console.ForegroundColor = previousColor;
         }
-    }
-
-    /// <summary>
-    /// Enum que representa as cores suportadas pelo console.
-    /// Utilizado para definir a cor do texto ao exibir mensagens.
-    /// </summary>
-    public enum ConsoleColorEnum
-    {
-        Black,
-        Blue,
-        Cyan,
-        DarkBlue,
-        DarkCyan,
-        DarkGray,
-        DarkGreen,
-        DarkMagenta,
-        DarkRed,
-        DarkYellow,
-        Gray,
-        Green,
-        Magenta,
-        Red,
-        White,
-        Yellow
     }
 }

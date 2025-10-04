@@ -58,7 +58,6 @@ namespace CliTool.Core
                         Console.WriteLine();
                         selectedOption.Execute.Invoke();
                         Console.WriteLine();
-                        ConsoleService.WriteSuccess("Executado com sucesso.");
                     }
                     catch (Exception ex)
                     {
@@ -68,8 +67,9 @@ namespace CliTool.Core
                     finally
                     {
                         watch.Stop();
-                        ConsoleService.WriteLine($"{watch.ElapsedMilliseconds}" + " ms\n", ConsoleColorEnum.DarkGray);
-                        ConsoleService.WriteLine($"Pressione qualquer tecla para continuar...", ConsoleColorEnum.DarkYellow);
+                        ConsoleService.WriteLine($"{watch.ElapsedMilliseconds}" + " ms", ConsoleColor.DarkGray);
+                        Console.WriteLine();
+                        ConsoleService.WriteLine($"Pressione qualquer tecla para continuar...", ConsoleColor.DarkYellow);
                         Console.ReadKey();
                         Console.Clear();
                     }

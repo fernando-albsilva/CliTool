@@ -17,22 +17,16 @@ namespace CliTool.Modules.Text
                 Name = "Módulo de Texto",
                 Options = new List<Option>
                 {
-                    new() { OrderText = "1", DisplayText = "Exibir texto", Execute = ShowText },
-                    new() { OrderText = "2", DisplayText = "Editar texto", Execute = EditText }
+                    new() { OrderText = "2", DisplayText = "Contador de caracter", Execute = CharCounter }
                 }
             };
         }
 
-        private static void ShowText()
+        private static void CharCounter()
         {
-            ConsoleService.WriteLine("Mostrando texto...");
+            ConsoleService.WriteLine("Texto: ");
+            string text = Console.ReadLine() ?? string.Empty;
+            ConsoleService.WriteResult(text.Length.ToString());
         }
-
-        private static void EditText()
-        {
-            Console.WriteLine("Editando texto...");
-        }
-
-       
     }
 }

@@ -18,7 +18,7 @@ namespace CliTool.Modules.Exemple
                 Options = new List<Option>
                 {
                     new() { OrderText = "1", DisplayText = "Ação 1", Execute = Action1 },
-                    new() { OrderText = "2", DisplayText = "Ação 1", Execute = Action2 },
+                    new() { OrderText = "2", DisplayText = "Ação 2", Execute = Action2 },
                     new() { OrderText = "3", DisplayText = "Ação 3", Execute = Action3 }
                 }
             };
@@ -26,17 +26,17 @@ namespace CliTool.Modules.Exemple
 
         private static void Action1()
         {
-            ConsoleService.WriteLine("Executando opção 1...");
+            ConsoleService.WriteResult("Executando opção 1...");
         }
 
         private static void Action2()
         {
-            ConsoleService.WriteLine("Executando opção 2...");
+            ConsoleService.WriteResult("Executando opção 2...");
         }
 
         private static void Action3()
         {
-            ConsoleService.WriteLine("Executando opção 2...");
+            ConsoleService.WriteResult("Executando opção 3...");
         }
     }
 }
