@@ -6,9 +6,12 @@ namespace CliTool.Core
 {
     public class BaseModule
     {
-        public Menu? Menu { get; }
+        private Menu Menu { get; set; }
 
-        public BaseModule(Menu menu)
+        public BaseModule() {}
+
+        public string Name => Menu.Name;
+        protected void SetMenu(Menu menu)
         {
             Menu = menu;
         }
@@ -40,13 +43,17 @@ namespace CliTool.Core
                     var watch = System.Diagnostics.Stopwatch.StartNew();
                     try
                     {
-                        ConsoleService.WriteLine($"\nExecutando: {selectedOption.DisplayText}\n", ConsoleColorEnum.Blue);
+                        
+                        Console.WriteLine();
+                        ConsoleService.WriteInfo($"Executando: {selectedOption.DisplayText}");
+                        Console.WriteLine();
                         selectedOption.Execute.Invoke();
-                        ConsoleService.WriteLine("Executado com sucesso.", ConsoleColorEnum.Green);
+                        Console.WriteLine();
+                        ConsoleService.WriteSuccess("Executado com sucesso.");
                     }
                     catch (Exception ex)
                     {
-                        ConsoleService.WriteLine("Erro na execução.", ConsoleColorEnum.Red);
+                        ConsoleService.WriteError("Erro na execução.");
                         ConsoleService.WriteLine($"\nErro ao executar a opção: {ex.Message}");
                     }
                     finally

@@ -23,7 +23,7 @@ namespace CliTool.Services
         {
             var json = JsonSerializer.Serialize(data, _options);
             var fullPath = CreateFullPath(filePath, FileName);
-            ConsoleService.WriteLine($"Escrevendo no arquivo: {fullPath}", ConsoleColorEnum.Blue);
+            ConsoleService.WriteInfo($"Escrevendo no arquivo: {fullPath}");
             File.WriteAllText(fullPath, json);
             return fullPath;
         }
@@ -32,12 +32,16 @@ namespace CliTool.Services
         /// <summary>
         /// Lê um arquivo JSON e desserializa para um objeto.
         /// </summary>
-        public T? ReadJsonFile<T>(string filePath)
+        public T? ReadJsonFile<T>(string filePath, string FileName)
         {
-            if (!File.Exists(filePath))
-                throw new FileNotFoundException($"Arquivo não encontrado: {filePath}");
+            var fullPath = CreateFullPath(filePath, FileName);
+            if (!File.Exists(fullPath))
+            {
+                ConsoleService.WriteWarning($"Arquivo {FileName}.json não encontrado: {filePath}");
+                return default;
+            }
 
-            var json = File.ReadAllText(filePath);
+            var json = File.ReadAllText(fullPath);
             return JsonSerializer.Deserialize<T>(json, _options);
         }
 
@@ -62,7 +66,7 @@ namespace CliTool.Services
 
         private static string CreateFullPath(string filePath, string fileName)
         {
-            return string.Concat(filePath, fileName);
+            return string.Concat(filePath, $"{fileName}.json");
         }
 
 

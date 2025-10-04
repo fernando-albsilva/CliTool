@@ -5,9 +5,9 @@ namespace CliTool.Modules.Text
 {
     public class TextModule : BaseModule
     {
-        public TextModule() : base(CreateMenu())
+        public TextModule()
         {
-
+            SetMenu(CreateMenu());
         }
 
         private static Menu CreateMenu()

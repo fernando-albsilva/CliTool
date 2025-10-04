@@ -1,5 +1,4 @@
 ﻿using CliTool.Core;
-using CliTool.Modules.Horario;
 using CliTool.Modules.Text;
 using CliTool.Services;
 
@@ -16,7 +15,7 @@ while (true)
 
     for (int i = 0; i < modules.Count; i++)
     {
-        ConsoleService.WriteLine($"{i + 1} - {modules[i].Menu?.Name}");
+        ConsoleService.WriteLine($"{i + 1} - {modules[i].Name}");
     }
     ConsoleService.WriteLine("0 - Sair");
 
@@ -31,8 +30,6 @@ while (true)
     {
         var selectedModule = modules[choice - 1];
         selectedModule.RunMenu();
-        // O menu de cada módulo já é executado no construtor
-        // Mas se você quiser, pode criar um método Run() que chama RunMenu()
     }
     else
     {

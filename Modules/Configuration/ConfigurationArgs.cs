@@ -2,7 +2,8 @@
 {
     public class ConfigurationArgs
     {
-        public string RootJsonFilesPath { get; set; } = string.Empty;
+        public string JsonModulesFilesDirectoryPath { get; set; } = AppContext.BaseDirectory;
+        public string RepositoriesDirectoryPath { get; set; } = "C:\\Repositorios";
         public List<ModuleConfig> ModulesConfig { get; set; } = new List<ModuleConfig>();
     }
 

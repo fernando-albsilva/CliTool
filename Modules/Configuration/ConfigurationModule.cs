@@ -1,7 +1,6 @@
 ﻿
 using CliTool.Modules.Configuration;
 using CliTool.Modules.Horario;
-using CliTool.Modules.Text;
 using CliTool.Services;
 
 namespace CliTool.Core
@@ -9,47 +8,70 @@ namespace CliTool.Core
     public class ConfigurationModule : BaseModule
     {
         public ConfigurationArgs ConfigurationArgs { get; set; }
-        public ConfigurationModule() : base(CreateMenu())
+        private JsonService JsonService { get; } = new JsonService();
+        public ConfigurationModule() 
         {
-            
+            SetMenu(CreateMenu());
         }
 
-        private static Menu CreateMenu()
+        private Menu CreateMenu()
         {
             return new Menu
             {
                 Name = "Módulo de Configuração",
                 Options = new List<Option>
                 {
-                    new() { OrderText = "1", DisplayText = "Executar configuração padrão", Execute = RunDefaultConfiguration }
+                    new() { OrderText = "1", DisplayText = "Executar configuração padrão", Execute = () => RunDefaultConfiguration() }
                 }
             };
         }
 
-        private static void RunDefaultConfiguration()
+        private void RunDefaultConfiguration()
         {
             var config = new ConfigurationArgs
             {
-                RootJsonFilesPath = AppContext.BaseDirectory,
                 ModulesConfig = new List<ModuleConfig> {
                     new ModuleConfig {
                         Name = nameof(HorarioModule),
-                        JsonFileName = $"{nameof(HorarioModule)}.json",
+                        JsonFileName = nameof(HorarioModule),
                         InitialData = new List<HorarioArg>()
                     }
                 }
             };
 
-            var jsonService = new JsonService();
+            var args = GetConfigurationArgs();
+
+            if (args == null)
+            {
+                CreateConfigFile();
+                args = JsonService.ReadJsonFile<ConfigurationArgs>(AppContext.BaseDirectory, nameof(ConfigurationModule));
+            }
+
+            if (args == null)
+            {
+                ConsoleService.WriteError("Não foi possível criar/recuperar o arquivo de configuração");
+                throw new Exception("Não foi possível criar/recuperar o arquivo de configuração");
+            }
 
             foreach (var moduleConfig in config.ModulesConfig)
             {
-                jsonService.CreateJsonFile(
-                    config.RootJsonFilesPath,
+                JsonService.CreateJsonFile(
+                    config.JsonModulesFilesDirectoryPath,
                     moduleConfig.JsonFileName,
                     moduleConfig.InitialData
                 );
             }
         }
+
+        private ConfigurationArgs? GetConfigurationArgs()
+        {
+            return JsonService.ReadJsonFile<ConfigurationArgs>(AppContext.BaseDirectory, nameof(ConfigurationModule));
+        }
+
+        private void CreateConfigFile()
+        {
+            JsonService.CreateJsonFile(AppContext.BaseDirectory, nameof(ConfigurationModule), new ConfigurationArgs());
+        } 
+
     }
 }
