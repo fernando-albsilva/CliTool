@@ -9,11 +9,11 @@ using CliTool.Services;
 
 var modules = new List<BaseModule>
             {
-                new ToolInfoModule(),
                 new ProjectModuleModule(),
+                new ToolInfoModule(),
+                new TimeModule(),
                 new TextModule(),
                 new HashModule(),
-                new TimeModule(),
                 new ConfigurationModule(),
             };
 
