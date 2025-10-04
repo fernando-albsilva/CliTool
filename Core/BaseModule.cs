@@ -54,7 +54,7 @@ namespace CliTool.Core
                     {
                         
                         Console.WriteLine();
-                        ConsoleService.WriteInfo($"Executando: {selectedOption.DisplayText}");
+                        ConsoleService.WriteInfo($"Executando: {selectedOption.OrderText} - {selectedOption.DisplayText}");
                         Console.WriteLine();
                         selectedOption.Execute.Invoke();
                         Console.WriteLine();
