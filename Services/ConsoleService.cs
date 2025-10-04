@@ -96,7 +96,7 @@ namespace CliTool.Services
         {
             var previousColor = Console.ForegroundColor;
 
-            Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), color.ToString());
+            Console.ForegroundColor = color;
             Console.WriteLine(text);
 
             Console.ForegroundColor = previousColor;
@@ -110,8 +110,20 @@ namespace CliTool.Services
         public static void Write(string text, ConsoleColor color = ConsoleColor.White)
         {
             var previousColor = Console.ForegroundColor;
-            Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), color.ToString());
+            Console.ForegroundColor = color;
             Console.Write(text);
+            Console.ForegroundColor = previousColor;
+        }
+
+        /// <summary>
+        /// Escreve um texto adicionando $ na cor verde.
+        /// </summary>
+        /// <param name="text">Texto a ser exibido.</param>
+        public static void WriteCommand(string text, ConsoleColor color = ConsoleColor.DarkGreen)
+        {
+            var previousColor = Console.ForegroundColor;
+            Console.ForegroundColor = color;
+            Console.WriteLine($"$ {text}");
             Console.ForegroundColor = previousColor;
         }
     }

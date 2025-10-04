@@ -1,6 +1,6 @@
 ﻿
-using CliTool.Modules.Configuration;
-using CliTool.Modules.Horario;
+using CliTool.Modules.Commands;
+using CliTool.Modules.Configuration.Payload;
 using CliTool.Modules.Project;
 using CliTool.Services;
 
@@ -8,10 +8,10 @@ namespace CliTool.Core
 {
     public class ConfigurationModule : BaseModule
     {
-        public ConfigurationArgs ConfigurationArgs { get; set; }
         private JsonService JsonService { get; } = new JsonService();
         public ConfigurationModule() 
         {
+            var createdFile = RunDefaultConfiguration();   
             SetMenu(CreateMenu());
         }
 
@@ -19,79 +19,77 @@ namespace CliTool.Core
         {
             return new Menu
             {
-                Name = "Módulo de Configuração",
+                Name = "Configuração",
                 Options = new List<Option>
                 {
-                    new() { OrderText = "1", DisplayText = "Executar configuração padrão", Execute = () => RunDefaultConfiguration() }
+                    new() { OrderText = "1", DisplayText = "Resetar configurações", Execute = () => RunDefaultConfiguration(true) }
                 }
             };
         }
 
-        private void RunDefaultConfiguration()
+        private bool RunDefaultConfiguration(bool resetConfiguration = false)
         {
-            var config = new ConfigurationArgs
-            {
-                ModulesConfig = new List<ModuleConfig> {
-                    new ModuleConfig {
-                        Name = nameof(HorarioModule),
-                        JsonFileName = nameof(HorarioModule),
-                        InitialData = new List<HorarioArg>()
-                    },
-                    new ModuleConfig {
-                        Name = nameof(ProjectModuleModule),
-                        JsonFileName = nameof(ProjectModuleModule),
-                        InitialData = new List<ProjectArg>
-                        {
-                            new ProjectArg
-                            {
-                                Label = "easy-restaurant-api",
-                                DirectoryPath = @"C:\Users\ferna\Repositorios\Easy-Restaurant-Api",
-                                Ide = "vscode"
-                            },
-                            new ProjectArg
-                            {
-                                Label = "easy-restaurant-api",
-                                DirectoryPath = @"C:\Users\ferna\Repositorios\Easy-Restaurant-Api",
-                                Ide = "visualstudio"
-                            }
-                        }
-                    }
-                }
-            };
+            var configurationArgs = new ConfigurationArgs();
+            var createFiles = false;
 
-            var args = GetConfigurationArgs();
-
-            if (args == null)
+            if (resetConfiguration || !CheckForJsonFile<ProjectModuleModule>())
             {
-                CreateConfigFile();
-                args = JsonService.ReadJsonFile<ConfigurationArgs>(AppContext.BaseDirectory, nameof(ConfigurationModule));
+                configurationArgs.ModulesConfig.Add(new ModuleConfig
+                {
+                    Name = nameof(ProjectModuleModule),
+                    JsonFileName = nameof(ProjectModuleModule),
+                    InitialData = ProjectLauncherPayload.Projects,
+                });
             }
 
-            if (args == null)
+            if (resetConfiguration || !CheckForJsonFile<ToolInfoModule>())
             {
-                ConsoleService.WriteError("Não foi possível criar/recuperar o arquivo de configuração");
-                throw new Exception("Não foi possível criar/recuperar o arquivo de configuração");
+                configurationArgs.ModulesConfig.Add(new ModuleConfig
+                {
+                    Name = nameof(ToolInfoModule),
+                    JsonFileName = nameof(ToolInfoModule),
+                    InitialData = ToolInfoPayload.Tools
+
+                });
             }
 
-            foreach (var moduleConfig in config.ModulesConfig)
+            foreach (var moduleConfig in configurationArgs.ModulesConfig)
             {
+                createFiles = true;
                 JsonService.CreateJsonFile(
-                    config.JsonModulesFilesDirectoryPath,
+                    configurationArgs.JsonModulesFilesDirectoryPath,
                     moduleConfig.JsonFileName,
                     moduleConfig.InitialData
                 );
             }
+
+            if (createFiles)
+            {
+                Console.Clear();
+                ConsoleService.WriteWarning("Necessário reinicializar cli pois arquivos de configuração dos módulos foram criados");
+                Environment.Exit(0);
+            }
+
+            return createFiles;
         }
 
-        private ConfigurationArgs? GetConfigurationArgs()
+        private bool CheckForJsonFile<T>()
         {
-            return JsonService.ReadJsonFile<ConfigurationArgs>(AppContext.BaseDirectory, nameof(ConfigurationModule));
+            var fullPath = JsonService.CreateFullPath(AppContext.BaseDirectory, typeof(T).Name);
+            return JsonService.ExistJsonFile(fullPath);
         }
 
-        private void CreateConfigFile()
+        public class ConfigurationArgs
         {
-            JsonService.CreateJsonFile(AppContext.BaseDirectory, nameof(ConfigurationModule), new ConfigurationArgs());
-        } 
+            public string JsonModulesFilesDirectoryPath { get; set; } = AppContext.BaseDirectory;
+            public List<ModuleConfig> ModulesConfig { get; set; } = new List<ModuleConfig>();
+        }
 
+        public class ModuleConfig
+        {
+            public string Name { get; set; } = string.Empty;
+            public string JsonFileName { get; set; } = string.Empty;
+            public required object InitialData { get; set; }
+        }
     }
 }

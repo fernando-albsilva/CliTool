@@ -6,8 +6,6 @@ namespace CliTool.Modules.Project
 {
     public class ProjectModuleModule : BaseModule
     {
-        private const string ConfigPath = "./";
-        private const string ConfigFile = "projects";
         private static readonly JsonService _jsonService = new();
         private static List<ProjectArg> _projects = new();
 
@@ -48,7 +46,7 @@ namespace CliTool.Modules.Project
 
             return new Menu
             {
-                Name = "Módulo de Projetos",
+                Name = "Projetos",
                 Options = options
             };
         }

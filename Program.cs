@@ -1,14 +1,20 @@
 ﻿using CliTool.Core;
+using CliTool.Modules.Commands;
 using CliTool.Modules.Exemple;
+using CliTool.Modules.Hash;
 using CliTool.Modules.Project;
 using CliTool.Modules.Text;
+using CliTool.Modules.Time;
 using CliTool.Services;
 
 var modules = new List<BaseModule>
             {
-                new TextModule(),
-                new ConfigurationModule(),
+                new ToolInfoModule(),
                 new ProjectModuleModule(),
+                new TextModule(),
+                new HashModule(),
+                new TimeModule(),
+                new ConfigurationModule(),
             };
 
 #if DEBUG

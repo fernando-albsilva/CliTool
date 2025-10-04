@@ -14,7 +14,7 @@ namespace CliTool.Modules.Exemple
         {
             return new Menu
             {
-                Name = "Módulo de Exemplo",
+                Name = "Exemplo",
                 Options = new List<Option>
                 {
                     new() { OrderText = "1", DisplayText = "Ação 1", Execute = Action1 },

@@ -17,7 +17,7 @@ namespace CliTool.Modules.Text
         {
             return new Menu
             {
-                Name = "Módulo de Texto",
+                Name = "Texto",
                 Options = new List<Option>
                 {
                     new() { OrderText = "1", DisplayText = "Contador de caracteres", Execute = CharCounter },
