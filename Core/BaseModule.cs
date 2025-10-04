@@ -18,6 +18,8 @@ namespace CliTool.Core
 
         public void RunMenu()
         {
+            Console.Clear();
+
             if (!HasMenu())
                throw new NotImplementedException("Menu não implementado");
            
@@ -29,13 +31,20 @@ namespace CliTool.Core
                 {
                     ConsoleService.WriteLine($"{option.OrderText} - {option.DisplayText}");
                 }
+
                 ConsoleService.WriteLine("0 - Voltar");
 
-                ConsoleService.Write("\nEscolha uma opção: ");
+                Console.WriteLine();
+
+                ConsoleService.Write("Escolha uma opção: ");
+                
                 var input = Console.ReadLine();
 
                 if (input == "0")
+                {
+                    Console.Clear();
                     break;
+                }
 
                 var selectedOption = Menu.Options.FirstOrDefault(o => o.OrderText == input);
                 if (selectedOption != null)
@@ -67,7 +76,7 @@ namespace CliTool.Core
                 }
                 else
                 {
-                    ConsoleService.WriteLine("\nOpção inválida! Pressione qualquer tecla para tentar novamente...");
+                    ConsoleService.WriteError("Opção inválida! Pressione qualquer tecla para tentar novamente...");
                     Console.ReadKey();
                     Console.Clear();
                 }

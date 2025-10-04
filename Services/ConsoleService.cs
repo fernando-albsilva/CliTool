@@ -10,7 +10,7 @@ namespace CliTool.Services
         /// <param name="text">Texto da mensagem a ser exibida.</param>
         public static void WriteInfo(string text)
         {
-            Write("[INFO]: ", ConsoleColorEnum.Blue);
+            Write("[Info]: ", ConsoleColorEnum.Blue);
             WriteLine(text);
         }
 
@@ -20,7 +20,7 @@ namespace CliTool.Services
         /// <param name="text">Texto da mensagem a ser exibida.</param>
         public static void WriteWarning(string text)
         {
-            Write("[WARN]: ", ConsoleColorEnum.Yellow);
+            Write("[Warn]: ", ConsoleColorEnum.Yellow);
             WriteLine(text);
         }
 
@@ -30,7 +30,7 @@ namespace CliTool.Services
         /// <param name="text">Texto da mensagem a ser exibida.</param>
         public static void WriteError(string text)
         {
-            Write("[ERROR]: ", ConsoleColorEnum.Red);
+            Write("[Error]: ", ConsoleColorEnum.Red);
             WriteLine(text);
         }
 
@@ -40,7 +40,7 @@ namespace CliTool.Services
         /// <param name="text">Texto da mensagem a ser exibida.</param>
         public static void WriteSuccess(string text)
         {
-            Write("[SUCCESS]: ", ConsoleColorEnum.Green);
+            Write("[Success]: ", ConsoleColorEnum.Green);
             WriteLine(text);
         }
 

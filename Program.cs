@@ -1,4 +1,5 @@
 ﻿using CliTool.Core;
+using CliTool.Modules.Exemple;
 using CliTool.Modules.Text;
 using CliTool.Services;
 
@@ -8,20 +9,25 @@ var modules = new List<BaseModule>
                 new ConfigurationModule(),
             };
 
+#if DEBUG
+modules.Add(new ExempleModule());
+#endif
+
 while (true)
 {
-    Console.Clear();
     ConsoleService.WriteModuleName("Menu Principal");
 
     for (int i = 0; i < modules.Count; i++)
     {
         ConsoleService.WriteLine($"{i + 1} - {modules[i].Name}");
     }
+
     ConsoleService.WriteLine("0 - Sair");
 
-    ConsoleService.Write("\nEscolha um módulo: ");
+    Console.WriteLine();
+    ConsoleService.Write("Escolha um módulo: ");
+    
     var input = Console.ReadLine();
-    Console.Clear();
 
     if (input == "0")
         break;
@@ -33,9 +39,11 @@ while (true)
     }
     else
     {
-        ConsoleService.WriteLine("\nOpção inválida! Pressione qualquer tecla para tentar novamente...");
+        ConsoleService.WriteError("Opção inválida! Pressione qualquer tecla para tentar novamente...");
         Console.ReadKey();
+        Console.Clear();
     }
 }
 
-Console.WriteLine("\nSaindo...");
+Console.WriteLine();
+Console.WriteLine("Saindo...");
