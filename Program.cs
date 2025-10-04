@@ -1,5 +1,6 @@
 ﻿using CliTool.Core;
 using CliTool.Modules.Exemple;
+using CliTool.Modules.Project;
 using CliTool.Modules.Text;
 using CliTool.Services;
 
@@ -7,6 +8,7 @@ var modules = new List<BaseModule>
             {
                 new TextModule(),
                 new ConfigurationModule(),
+                new ProjectModuleModule(),
             };
 
 #if DEBUG

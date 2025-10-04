@@ -1,6 +1,7 @@
 ﻿
 using CliTool.Modules.Configuration;
 using CliTool.Modules.Horario;
+using CliTool.Modules.Project;
 using CliTool.Services;
 
 namespace CliTool.Core
@@ -35,6 +36,25 @@ namespace CliTool.Core
                         Name = nameof(HorarioModule),
                         JsonFileName = nameof(HorarioModule),
                         InitialData = new List<HorarioArg>()
+                    },
+                    new ModuleConfig {
+                        Name = nameof(ProjectModuleModule),
+                        JsonFileName = nameof(ProjectModuleModule),
+                        InitialData = new List<ProjectArg>
+                        {
+                            new ProjectArg
+                            {
+                                Label = "easy-restaurant-api",
+                                DirectoryPath = @"C:\Users\ferna\Repositorios\Easy-Restaurant-Api",
+                                Ide = "vscode"
+                            },
+                            new ProjectArg
+                            {
+                                Label = "easy-restaurant-api",
+                                DirectoryPath = @"C:\Users\ferna\Repositorios\Easy-Restaurant-Api",
+                                Ide = "visualstudio"
+                            }
+                        }
                     }
                 }
             };
