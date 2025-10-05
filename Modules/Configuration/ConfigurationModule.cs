@@ -1,6 +1,7 @@
 ﻿
 using CliTool.Modules.Commands;
 using CliTool.Modules.Configuration.Payload;
+using CliTool.Modules.OracleExemple;
 using CliTool.Modules.Project;
 using CliTool.Modules.Time;
 using CliTool.Services;
@@ -61,6 +62,16 @@ namespace CliTool.Core
                     Name = nameof(TimeModule),
                     JsonFileName = nameof(TimeModule),
                     InitialData = new List<TimeMark>()
+                });
+            }
+
+            if (resetConfiguration || !CheckForJsonFile<OracleSnippetModule>())
+            {
+                configurationArgs.ModulesConfig.Add(new ModuleConfig
+                {
+                    Name = nameof(OracleSnippetModule),
+                    JsonFileName = nameof(OracleSnippetModule),
+                    InitialData = OracleSnippetPayload.Snippets
                 });
             }
 

@@ -2,6 +2,7 @@
 using CliTool.Modules.Commands;
 using CliTool.Modules.Exemple;
 using CliTool.Modules.Hash;
+using CliTool.Modules.OracleExemple;
 using CliTool.Modules.Project;
 using CliTool.Modules.Text;
 using CliTool.Modules.Time;
@@ -12,6 +13,7 @@ var modules = new List<BaseModule>
                 new ProjectModuleModule(),
                 new ToolInfoModule(),
                 new TimeModule(),
+                new OracleSnippetModule(),
                 new TextModule(),
                 new HashModule(),
                 new ConfigurationModule(),
