@@ -1,4 +1,6 @@
-﻿public class ProjectArg
+﻿
+
+public class ProjectArg
 {
     /// <summary>
     /// Nome amigável exibido no menu.
@@ -14,4 +16,9 @@
     /// IDE usada para abrir o projeto (vscode ou visualstudio).
     /// </summary>
     public string Ide { get; set; } = "vscode";
+
+    /// <summary>
+    /// Id usado para abrir multiplos projetos de uma vez.
+    /// </summary>
+    public int? GrouId { get; set; } 
 }

@@ -12,10 +12,24 @@
             },
             new ProjectArg
             {
+                Label = "web-app",
+                DirectoryPath = @"C:\Users\ferna\Repositorios\ezyapp-web",
+                Ide = "visualstudio"
+            },
+             new ProjectArg
+            {
                 Label = "easy-restaurant-api",
                 DirectoryPath = @"C:\Users\ferna\Repositorios\Easy-Restaurant-Api",
-                Ide = "visualstudio"
-            }
+                Ide = "visualstudio",
+                GrouId = 1
+            },
+            new ProjectArg
+            {
+                Label = "web-app",
+                DirectoryPath = @"C:\Users\ferna\Repositorios\ezyapp-web",
+                Ide = "vscode",
+                GrouId = 1
+            },
         };
     }
 }

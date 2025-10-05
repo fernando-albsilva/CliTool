@@ -1,6 +1,7 @@
 ﻿using CliTool.Core;
 using CliTool.Services;
 using System.Diagnostics;
+using System.Text;
 
 namespace CliTool.Modules.Project
 {
@@ -31,8 +32,12 @@ namespace CliTool.Modules.Project
 
             if (_projects.Count > 0)
             {
+                var singleProjects = _projects.Where(project => project.GrouId is null);
+                var setProjects = _projects.Where(project => project.GrouId is not null).GroupBy(project => project.GrouId);
+
                 int order = 1;
-                foreach (var project in _projects)
+                
+                foreach (var project in singleProjects)
                 {
                     options.Add(new Option
                     {
@@ -42,6 +47,26 @@ namespace CliTool.Modules.Project
                     });
                     order++;
                 }
+
+                foreach (var set in setProjects)
+                {
+
+                    var displayText = new StringBuilder();
+                    displayText.AppendLine("Conjunto:");
+
+                    foreach (var project in set) {
+                        displayText.AppendLine($"    * {project.Label} ({project.Ide})");
+                    }
+
+                    options.Add(new Option
+                    {
+                        OrderText = order.ToString(),
+                        DisplayText = displayText.ToString(),
+                        Execute = () => OpenSetProject(set)
+                    });
+
+                    order++;
+                }
             }
 
             return new Menu
@@ -49,6 +74,14 @@ namespace CliTool.Modules.Project
                 Name = "Projetos",
                 Options = options
             };
+        }
+
+        private static void OpenSetProject(IGrouping<int?, ProjectArg> set)
+        {
+            foreach (var project in set)
+            {
+                OpenProject(project);
+            }
         }
 
         private static void OpenProject(ProjectArg project)
