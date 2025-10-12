@@ -5,9 +5,9 @@ using System.Text;
 
 namespace CliTool.Modules.Hash
 {
-    public class HashModule : BaseModule
+    public class ModuleHash : BaseModule
     {
-        public HashModule()
+        public ModuleHash()
         {
             SetMenu(CreateMenu());
         }

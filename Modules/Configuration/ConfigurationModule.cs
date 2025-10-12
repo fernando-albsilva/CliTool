@@ -8,10 +8,10 @@ using CliTool.Services;
 
 namespace CliTool.Core
 {
-    public class ConfigurationModule : BaseModule
+    public class ModuleCliConfiguration : BaseModule
     {
         private JsonService JsonService { get; } = new JsonService();
-        public ConfigurationModule() 
+        public ModuleCliConfiguration() 
         {
             var createdFile = RunDefaultConfiguration();   
             SetMenu(CreateMenu());
@@ -34,43 +34,43 @@ namespace CliTool.Core
             var configurationArgs = new ConfigurationArgs();
             var createFiles = false;
 
-            if (resetConfiguration || !CheckForJsonFile<ProjectModuleModule>())
+            if (resetConfiguration || !CheckForJsonFile<ModuleProjectLauncher>())
             {
                 configurationArgs.ModulesConfig.Add(new ModuleConfig
                 {
-                    Name = nameof(ProjectModuleModule),
-                    JsonFileName = nameof(ProjectModuleModule),
+                    Name = nameof(ModuleProjectLauncher),
+                    JsonFileName = nameof(ModuleProjectLauncher),
                     InitialData = ProjectLauncherPayload.Projects,
                 });
             }
 
-            if (resetConfiguration || !CheckForJsonFile<ToolInfoModule>())
+            if (resetConfiguration || !CheckForJsonFile<ModuleCommandHelper>())
             {
                 configurationArgs.ModulesConfig.Add(new ModuleConfig
                 {
-                    Name = nameof(ToolInfoModule),
-                    JsonFileName = nameof(ToolInfoModule),
+                    Name = nameof(ModuleCommandHelper),
+                    JsonFileName = nameof(ModuleCommandHelper),
                     InitialData = ToolInfoPayload.Tools
 
                 });
             }
 
-            if (resetConfiguration || !CheckForJsonFile<TimeModule>())
+            if (resetConfiguration || !CheckForJsonFile<ModuleTime>())
             {
                 configurationArgs.ModulesConfig.Add(new ModuleConfig
                 {
-                    Name = nameof(TimeModule),
-                    JsonFileName = nameof(TimeModule),
+                    Name = nameof(ModuleTime),
+                    JsonFileName = nameof(ModuleTime),
                     InitialData = new List<TimeMark>()
                 });
             }
 
-            if (resetConfiguration || !CheckForJsonFile<OracleSnippetModule>())
+            if (resetConfiguration || !CheckForJsonFile<ModuleOracleSnippet>())
             {
                 configurationArgs.ModulesConfig.Add(new ModuleConfig
                 {
-                    Name = nameof(OracleSnippetModule),
-                    JsonFileName = nameof(OracleSnippetModule),
+                    Name = nameof(ModuleOracleSnippet),
+                    JsonFileName = nameof(ModuleOracleSnippet),
                     InitialData = OracleSnippetPayload.Snippets
                 });
             }

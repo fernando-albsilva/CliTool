@@ -1,4 +1,4 @@
-﻿namespace CliTool.Modules.ToolInfo
+﻿namespace CliTool.Modules.CommandHelper
 {
     public class ToolArg
     {

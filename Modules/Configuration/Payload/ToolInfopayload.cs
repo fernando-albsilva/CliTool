@@ -1,4 +1,4 @@
-﻿using CliTool.Modules.ToolInfo;
+﻿using CliTool.Modules.CommandHelper;
 
 namespace CliTool.Modules.Configuration.Payload
 {

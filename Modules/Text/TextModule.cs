@@ -6,9 +6,9 @@ using System.Text.RegularExpressions;
 
 namespace CliTool.Modules.Text
 {
-    public class TextModule : BaseModule
+    public class ModuleText : BaseModule
     {
-        public TextModule()
+        public ModuleText()
         {
             SetMenu(CreateMenu());
         }

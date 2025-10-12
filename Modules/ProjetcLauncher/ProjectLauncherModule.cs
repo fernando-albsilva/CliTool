@@ -5,12 +5,12 @@ using System.Text;
 
 namespace CliTool.Modules.Project
 {
-    public class ProjectModuleModule : BaseModule
+    public class ModuleProjectLauncher : BaseModule
     {
         private static readonly JsonService _jsonService = new();
         private static List<ProjectArg> _projects = new();
 
-        public ProjectModuleModule()
+        public ModuleProjectLauncher()
         {
             LoadProjects();
             SetMenu(CreateMenu());
@@ -18,11 +18,11 @@ namespace CliTool.Modules.Project
 
         private static void LoadProjects()
         {
-            _projects = _jsonService.ReadJsonFile<List<ProjectArg>>(AppContext.BaseDirectory, nameof(ProjectModuleModule)) ?? new List<ProjectArg>();
+            _projects = _jsonService.ReadJsonFile<List<ProjectArg>>(AppContext.BaseDirectory, nameof(ModuleProjectLauncher)) ?? new List<ProjectArg>();
 
             if (_projects.Count == 0)
             {
-                ConsoleService.WriteWarning($"Nenhum projeto encontrado no arquivo {nameof(ProjectModuleModule)}.json.");
+                ConsoleService.WriteWarning($"Nenhum projeto encontrado no arquivo {nameof(ModuleProjectLauncher)}.json.");
             }
         }
 

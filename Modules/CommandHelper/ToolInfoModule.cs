@@ -1,15 +1,15 @@
 ﻿using CliTool.Core;
-using CliTool.Modules.ToolInfo;
+using CliTool.Modules.CommandHelper;
 using CliTool.Services;
 
 namespace CliTool.Modules.Commands
 {
-    public class ToolInfoModule : BaseModule
+    public class ModuleCommandHelper : BaseModule
     {
         private static readonly JsonService _jsonService = new();
         private static List<ToolArg> _tools = new();
 
-        public ToolInfoModule()
+        public ModuleCommandHelper()
         {
             LoadToolsFromJson();
             SetMenu(CreateMenu());
@@ -41,11 +41,11 @@ namespace CliTool.Modules.Commands
 
         private static void LoadToolsFromJson()
         {
-            _tools = _jsonService.ReadJsonFile<List<ToolArg>>(AppContext.BaseDirectory, nameof(ToolInfoModule)) ?? new List<ToolArg>();
+            _tools = _jsonService.ReadJsonFile<List<ToolArg>>(AppContext.BaseDirectory, nameof(ModuleCommandHelper)) ?? new List<ToolArg>();
            
             if (_tools.Count == 0) 
             { 
-                ConsoleService.WriteWarning($"Nenhum ferramenta encontrado no arquivo {nameof(ToolInfoModule)}.json.");
+                ConsoleService.WriteWarning($"Nenhum ferramenta encontrado no arquivo {nameof(ModuleCommandHelper)}.json.");
             }
         }
 

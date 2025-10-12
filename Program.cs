@@ -10,13 +10,13 @@ using CliTool.Services;
 
 var modules = new List<BaseModule>
             {
-                new ProjectModuleModule(),
-                new ToolInfoModule(),
-                new TimeModule(),
-                new OracleSnippetModule(),
-                new TextModule(),
-                new HashModule(),
-                new ConfigurationModule(),
+                new ModuleProjectLauncher(),
+                new ModuleCommandHelper(),
+                new ModuleTime(),
+                new ModuleOracleSnippet(),
+                new ModuleText(),
+                new ModuleHash(),
+                new ModuleCliConfiguration(),
             };
 
 #if DEBUG

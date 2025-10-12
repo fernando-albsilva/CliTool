@@ -3,10 +3,10 @@ using CliTool.Services;
 
 namespace CliTool.Modules.Time
 {
-    public class TimeModule : BaseModule
+    public class ModuleTime : BaseModule
     {
         private static readonly JsonService _jsonService = new JsonService();
-        public TimeModule()
+        public ModuleTime()
         {
             SetMenu(CreateMenu());
         }
@@ -75,17 +75,17 @@ namespace CliTool.Modules.Time
             };
 
            
-            var marks = _jsonService.ReadJsonFile<List<TimeMark>>(AppContext.BaseDirectory, nameof(TimeModule)) ?? new List<TimeMark>();
+            var marks = _jsonService.ReadJsonFile<List<TimeMark>>(AppContext.BaseDirectory, nameof(ModuleTime)) ?? new List<TimeMark>();
             marks.Add(mark);
 
             var orderMarks = marks.OrderByDescending(x => x.Date);
 
-            _jsonService.CreateJsonFile(AppContext.BaseDirectory, nameof(TimeModule), marks);
+            _jsonService.CreateJsonFile(AppContext.BaseDirectory, nameof(ModuleTime), marks);
         }
 
         private static void ListMarks()
         {
-            var marks = _jsonService.ReadJsonFile<List<TimeMark>>(AppContext.BaseDirectory, nameof(TimeModule));
+            var marks = _jsonService.ReadJsonFile<List<TimeMark>>(AppContext.BaseDirectory, nameof(ModuleTime));
 
             if (marks == null || !marks.Any())
             {

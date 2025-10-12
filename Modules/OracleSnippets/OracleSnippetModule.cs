@@ -3,12 +3,12 @@ using CliTool.Services;
 
 namespace CliTool.Modules.OracleExemple
 {
-    class OracleSnippetModule : BaseModule
+    class ModuleOracleSnippet : BaseModule
     {
         private static readonly JsonService _jsonService = new();
         private static List<SnippetArg> _exemples = new();
 
-        public OracleSnippetModule()
+        public ModuleOracleSnippet()
         {
             LoadExemplesFromJson();
             SetMenu(CreateMenu());
@@ -51,11 +51,11 @@ namespace CliTool.Modules.OracleExemple
 
         private static void LoadExemplesFromJson()
         {
-            _exemples = _jsonService.ReadJsonFile<List<SnippetArg>>(AppContext.BaseDirectory, nameof(OracleSnippetModule)) ?? new List<SnippetArg>();
+            _exemples = _jsonService.ReadJsonFile<List<SnippetArg>>(AppContext.BaseDirectory, nameof(ModuleOracleSnippet)) ?? new List<SnippetArg>();
 
             if (_exemples.Count == 0)
             {
-                ConsoleService.WriteWarning($"Nenhum exemplo encontrado no arquivo {nameof(OracleSnippetModule)}.json.");
+                ConsoleService.WriteWarning($"Nenhum exemplo encontrado no arquivo {nameof(ModuleOracleSnippet)}.json.");
             }
         }
     }
