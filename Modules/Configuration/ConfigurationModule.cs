@@ -1,8 +1,10 @@
 ﻿
+using CliTool.Modules.CommandExecutor;
 using CliTool.Modules.Commands;
 using CliTool.Modules.Configuration.Payload;
 using CliTool.Modules.OracleExemple;
 using CliTool.Modules.Project;
+using CliTool.Modules.ProjectStarter;
 using CliTool.Modules.Time;
 using CliTool.Services;
 
@@ -72,6 +74,26 @@ namespace CliTool.Core
                     Name = nameof(ModuleOracleSnippet),
                     JsonFileName = nameof(ModuleOracleSnippet),
                     InitialData = OracleSnippetPayload.Snippets
+                });
+            }
+
+            if (resetConfiguration || !CheckForJsonFile<ProjectStarterModule>())
+            {
+                configurationArgs.ModulesConfig.Add(new ModuleConfig
+                {
+                    Name = nameof(ProjectStarterModule),
+                    JsonFileName = nameof(ProjectStarterModule),
+                    InitialData = ProjectStarterPayload.Projects
+                });
+            }
+
+            if (resetConfiguration || !CheckForJsonFile<CommandExecutorModule>())
+            {
+                configurationArgs.ModulesConfig.Add(new ModuleConfig
+                {
+                    Name = nameof(CommandExecutorModule),
+                    JsonFileName = nameof(CommandExecutorModule),
+                    InitialData = CommandExecutorPayload.CommandLists
                 });
             }
 
