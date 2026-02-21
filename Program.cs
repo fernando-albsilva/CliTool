@@ -1,9 +1,11 @@
 ﻿using CliTool.Core;
+using CliTool.Modules.CommandExecutor;
 using CliTool.Modules.Commands;
 using CliTool.Modules.Exemple;
 using CliTool.Modules.Hash;
 using CliTool.Modules.OracleExemple;
 using CliTool.Modules.Project;
+using CliTool.Modules.ProjectStarter;
 using CliTool.Modules.Text;
 using CliTool.Modules.Time;
 using CliTool.Services;
@@ -11,6 +13,8 @@ using CliTool.Services;
 var modules = new List<BaseModule>
             {
                 new ModuleProjectLauncher(),
+                new ProjectStarterModule(),
+                new CommandExecutorModule(),
                 new ModuleCommandHelper(),
                 new ModuleTime(),
                 new ModuleOracleSnippet(),
