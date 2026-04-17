@@ -73,7 +73,7 @@ namespace CliTool.Modules.ProjectStarter
 
             return new Menu
             {
-                Name = "Project Starter",
+                Name = "Iniciar Projeto",
                 Options = options
             };
         }

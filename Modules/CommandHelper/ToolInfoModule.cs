@@ -34,14 +34,14 @@ namespace CliTool.Modules.Commands
 
             return new Menu
             {
-                Name = "Listagem de Comandos",
+                Name = "Listar Comandos",
                 Options = options
             };
         }
 
         private static void LoadToolsFromJson()
         {
-            _tools = _jsonService.ReadJsonFile<List<ToolArg>>(AppContext.BaseDirectory, nameof(ModuleCommandHelper)) ?? new List<ToolArg>();
+            _tools = _jsonService.ReadJsonFile<List<ToolArg>>(Config.ConfigDirectoryPath, nameof(ModuleCommandHelper)) ?? new List<ToolArg>();
            
             if (_tools.Count == 0) 
             { 

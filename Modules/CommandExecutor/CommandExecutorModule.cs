@@ -19,7 +19,7 @@ namespace CliTool.Modules.CommandExecutor
 
         private static void LoadCommandLists()
         {
-            _commandLists = _jsonService.ReadJsonFile<List<CommandListArg>>(AppContext.BaseDirectory, nameof(CommandExecutorModule)) ?? new List<CommandListArg>();
+            _commandLists = _jsonService.ReadJsonFile<List<CommandListArg>>(Config.ConfigDirectoryPath, nameof(CommandExecutorModule)) ?? new List<CommandListArg>();
 
             if (_commandLists.Count == 0)
             {
@@ -80,7 +80,7 @@ namespace CliTool.Modules.CommandExecutor
 
             return new Menu
             {
-                Name = "Command Executor",
+                Name = "Executor de Comandos",
                 Options = options
             };
         }

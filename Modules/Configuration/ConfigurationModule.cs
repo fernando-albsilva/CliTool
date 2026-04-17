@@ -2,10 +2,8 @@
 using CliTool.Modules.CommandExecutor;
 using CliTool.Modules.Commands;
 using CliTool.Modules.Configuration.Payload;
-using CliTool.Modules.OracleExemple;
 using CliTool.Modules.Project;
 using CliTool.Modules.ProjectStarter;
-using CliTool.Modules.Time;
 using CliTool.Services;
 
 namespace CliTool.Core
@@ -23,7 +21,7 @@ namespace CliTool.Core
         {
             return new Menu
             {
-                Name = "Configuração",
+                Name = "Configurar",
                 Options = new List<Option>
                 {
                     new() { OrderText = "1", DisplayText = "Resetar configurações", Execute = () => RunDefaultConfiguration(true) }
@@ -54,26 +52,6 @@ namespace CliTool.Core
                     JsonFileName = nameof(ModuleCommandHelper),
                     InitialData = ToolInfoPayload.Tools
 
-                });
-            }
-
-            if (resetConfiguration || !CheckForJsonFile<ModuleTime>())
-            {
-                configurationArgs.ModulesConfig.Add(new ModuleConfig
-                {
-                    Name = nameof(ModuleTime),
-                    JsonFileName = nameof(ModuleTime),
-                    InitialData = new List<TimeMark>()
-                });
-            }
-
-            if (resetConfiguration || !CheckForJsonFile<ModuleOracleSnippet>())
-            {
-                configurationArgs.ModulesConfig.Add(new ModuleConfig
-                {
-                    Name = nameof(ModuleOracleSnippet),
-                    JsonFileName = nameof(ModuleOracleSnippet),
-                    InitialData = OracleSnippetPayload.Snippets
                 });
             }
 
