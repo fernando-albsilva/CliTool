@@ -2,6 +2,7 @@
 using CliTool.Modules.CommandExecutor;
 using CliTool.Modules.Commands;
 using CliTool.Modules.Configuration.Payload;
+using CliTool.Modules.Git;
 using CliTool.Modules.Project;
 using CliTool.Modules.ProjectStarter;
 using CliTool.Services;
@@ -33,6 +34,11 @@ namespace CliTool.Core
         {
             var configurationArgs = new ConfigurationArgs();
             var createFiles = false;
+
+            if (!Directory.Exists(Config.ConfigDirectoryPath))
+            {
+                Directory.CreateDirectory(Config.ConfigDirectoryPath);
+            }
 
             if (resetConfiguration || !CheckForJsonFile<ModuleProjectLauncher>())
             {
@@ -75,11 +81,21 @@ namespace CliTool.Core
                 });
             }
 
+            if (resetConfiguration || !CheckForJsonFile<GitModule>())
+            {
+                configurationArgs.ModulesConfig.Add(new ModuleConfig
+                {
+                    Name = nameof(GitModule),
+                    JsonFileName = nameof(GitModule),
+                    InitialData = GitPayload.Args,
+                });
+            }
+
             foreach (var moduleConfig in configurationArgs.ModulesConfig)
             {
                 createFiles = true;
                 JsonService.CreateJsonFile(
-                    configurationArgs.JsonModulesFilesDirectoryPath,
+                    Config.ConfigDirectoryPath,
                     moduleConfig.JsonFileName,
                     moduleConfig.InitialData
                 );
@@ -97,13 +113,12 @@ namespace CliTool.Core
 
         private bool CheckForJsonFile<T>()
         {
-            var fullPath = JsonService.CreateFullPath(AppContext.BaseDirectory, typeof(T).Name);
+            var fullPath = JsonService.CreateFullPath(Config.ConfigDirectoryPath, typeof(T).Name);
             return JsonService.ExistJsonFile(fullPath);
         }
 
         public class ConfigurationArgs
         {
-            public string JsonModulesFilesDirectoryPath { get; set; } = AppContext.BaseDirectory;
             public List<ModuleConfig> ModulesConfig { get; set; } = new List<ModuleConfig>();
         }
 
