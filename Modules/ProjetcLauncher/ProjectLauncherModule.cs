@@ -18,7 +18,7 @@ namespace CliTool.Modules.Project
 
         private static void LoadProjects()
         {
-            _projects = _jsonService.ReadJsonFile<List<ProjectArg>>(AppContext.BaseDirectory, nameof(ModuleProjectLauncher)) ?? new List<ProjectArg>();
+            _projects = _jsonService.ReadJsonFile<List<ProjectArg>>(Config.ConfigDirectoryPath, nameof(ModuleProjectLauncher)) ?? new List<ProjectArg>();
 
             if (_projects.Count == 0)
             {
@@ -71,7 +71,7 @@ namespace CliTool.Modules.Project
 
             return new Menu
             {
-                Name = "Projetos",
+                Name = "Abrir Projetos",
                 Options = options
             };
         }

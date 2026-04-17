@@ -1,135 +1,84 @@
-using CliTool.Core;
-using CliTool.Services;
+﻿
+using CliTool.Modules.CommandExecutor;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text;
 
-namespace CliTool.Modules.ProjectStarter
+namespace CliTool.Services
 {
-    public class ProjectStarterModule : BaseModule
+    public class TerminalService
     {
-        private static readonly JsonService _jsonService = new();
-        private static List<StarterArg> _projects = new();
-
-        public ProjectStarterModule()
+        public static bool RunCommandSequential(CommandItem command, string? workingDirectory)
         {
-            LoadProjects();
-            SetMenu(CreateMenu());
-        }
+            ProcessStartInfo psi;
 
-        private static void LoadProjects()
-        {
-            _projects = _jsonService.ReadJsonFile<List<StarterArg>>(Config.ConfigDirectoryPath, nameof(ProjectStarterModule)) ?? new List<StarterArg>();
-
-            if (_projects.Count == 0)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                ConsoleService.WriteWarning($"Nenhum projeto encontrado no arquivo {nameof(ProjectStarterModule)}.json.");
-            }
-        }
-
-        private static Menu CreateMenu()
-        {
-            var options = new List<Option>();
-
-            if (_projects.Count > 0)
-            {
-                var singleProjects = _projects.Where(project => project.GroupId is null);
-                var setProjects = _projects.Where(project => project.GroupId is not null).GroupBy(project => project.GroupId);
-
-                int order = 1;
-
-                foreach (var project in singleProjects)
+                psi = new ProcessStartInfo
                 {
-                    options.Add(new Option
-                    {
-                        OrderText = order.ToString(),
-                        DisplayText = $"{project.Label} ({project.DirectoryPath})",
-                        Execute = () => StartProject(project)
-                    });
-                    order++;
-                }
-
-                foreach (var set in setProjects)
+                    FileName = "cmd.exe",
+                    Arguments = $"/c {command.Command}",
+                    WorkingDirectory = workingDirectory ?? Environment.CurrentDirectory,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
+            }
+            else
+            {
+                psi = new ProcessStartInfo
                 {
-                    var groupName = set.FirstOrDefault()?.GroupName ?? $"Grupo {set.Key}";
-                    var displayText = new StringBuilder();
-                    displayText.AppendLine($"Conjunto: {groupName}");
-
-                    foreach (var project in set)
-                    {
-                        displayText.AppendLine($"    * {project.Label}");
-                    }
-
-                    options.Add(new Option
-                    {
-                        OrderText = order.ToString(),
-                        DisplayText = displayText.ToString(),
-                        Execute = () => StartSetProject(set)
-                    });
-
-                    order++;
-                }
+                    FileName = "/bin/bash",
+                    Arguments = $"-c \"{command.Command}\"",
+                    WorkingDirectory = workingDirectory ?? Environment.CurrentDirectory,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
             }
 
-            return new Menu
+            using var process = Process.Start(psi);
+            if (process == null)
             {
-                Name = "Iniciar Projeto",
-                Options = options
-            };
+                ConsoleService.WriteError("Falha ao iniciar processo.");
+                return false;
+            }
+
+            var output = process.StandardOutput.ReadToEnd();
+            var error = process.StandardError.ReadToEnd();
+
+            process.WaitForExit();
+
+            if (!string.IsNullOrWhiteSpace(output))
+            {
+                ConsoleService.WriteLine(output, ConsoleColor.DarkGray);
+            }
+
+            if (!string.IsNullOrWhiteSpace(error))
+            {
+                ConsoleService.WriteLine(error, ConsoleColor.DarkRed);
+            }
+
+            return process.ExitCode == 0;
         }
 
-        private static void StartSetProject(IGrouping<int?, StarterArg> set)
+        public static void RunCommandInNewTerminal(CommandItem command, string? workingDirectory)
         {
-            ConsoleService.WriteInfo($"Iniciando conjunto de projetos...");
-            foreach (var project in set)
-            {
-                StartProject(project);
-                Thread.Sleep(500); // Pequeno delay entre cada terminal
-            }
-            ConsoleService.WriteSuccess($"Todos os {set.Count()} projetos foram iniciados em terminais separados.");
-        }
+            var fullCommand = command.Command;
 
-        private static void StartProject(StarterArg project)
-        {
-            if (!Directory.Exists(project.DirectoryPath))
+            if (!string.IsNullOrEmpty(workingDirectory))
             {
-                ConsoleService.WriteError($"Diretório não encontrado: {project.DirectoryPath}");
-                return;
+                var separator = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? " && " : "; ";
+                fullCommand = $"cd \"{workingDirectory}\"{separator}{command.Command}";
             }
-
-            if (project.Commands == null || project.Commands.Count == 0)
-            {
-                ConsoleService.WriteWarning($"Nenhum comando definido para o projeto: {project.Label}");
-                return;
-            }
-
-            try
-            {
-                OpenTerminalWithCommands(project);
-                ConsoleService.WriteSuccess($"Projeto '{project.Label}' iniciado em novo terminal.");
-            }
-            catch (Exception ex)
-            {
-                ConsoleService.WriteError($"Erro ao iniciar o projeto '{project.Label}': {ex.Message}");
-            }
-        }
-
-        private static void OpenTerminalWithCommands(StarterArg project)
-        {
-            // Concatena os comandos com ; (Linux/Mac) ou && (Windows)
-            var commandSeparator = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? " && " : "; ";
-            var commands = string.Join(commandSeparator, project.Commands);
-
-            // Adiciona cd para o diretório do projeto como primeiro comando
-            var fullCommand = $"cd \"{project.DirectoryPath}\"{commandSeparator}{commands}";
 
             ProcessStartInfo psi;
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                // Windows: usa o terminal especificado ou cmd por padrão
-                var terminal = project.Terminal?.ToLowerInvariant() ?? "cmd";
-                
+                var terminal = command.Terminal?.ToLowerInvariant() ?? "cmd";
+
                 psi = terminal switch
                 {
                     "powershell" => new ProcessStartInfo
@@ -164,8 +113,7 @@ namespace CliTool.Modules.ProjectStarter
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                // macOS: usa Terminal.app ou iTerm
-                var terminal = project.Terminal?.ToLowerInvariant() ?? "terminal";
+                var terminal = command.Terminal?.ToLowerInvariant() ?? "terminal";
                 var escapedCommand = fullCommand.Replace("\"", "\\\"");
 
                 psi = terminal switch
@@ -186,8 +134,7 @@ namespace CliTool.Modules.ProjectStarter
             }
             else
             {
-                // Linux: tenta detectar o terminal disponível ou usa o especificado
-                var terminal = project.Terminal?.ToLowerInvariant() ?? DetectLinuxTerminal();
+                var terminal = command.Terminal?.ToLowerInvariant() ?? DetectLinuxTerminal();
 
                 psi = terminal switch
                 {
@@ -247,7 +194,6 @@ namespace CliTool.Modules.ProjectStarter
 
         private static string DetectLinuxTerminal()
         {
-            // Lista de terminais comuns em ordem de preferência
             var terminals = new[]
             {
                 "gnome-terminal",
@@ -275,7 +221,7 @@ namespace CliTool.Modules.ProjectStarter
 
                     using var process = Process.Start(psi);
                     process?.WaitForExit();
-                    
+
                     if (process?.ExitCode == 0)
                     {
                         return terminal;
@@ -283,11 +229,11 @@ namespace CliTool.Modules.ProjectStarter
                 }
                 catch
                 {
-                    // Ignora erros e tenta o próximo
+                    // Ignora e tenta o próximo
                 }
             }
 
-            return "xterm"; // Fallback
+            return "xterm";
         }
     }
 }

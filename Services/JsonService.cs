@@ -66,7 +66,7 @@ namespace CliTool.Services
 
         public static string CreateFullPath(string filePath, string fileName)
         {
-            return string.Concat(filePath, $"{fileName}.json");
+            return Path.Combine(filePath, $"{fileName}.json");
         }
 
 
